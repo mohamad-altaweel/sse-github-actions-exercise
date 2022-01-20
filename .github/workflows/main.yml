@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on: [push]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  style_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install style checker"
+        run: pip install --user black
+      - name: "Run style check"
+        run: black --check .
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install dependices"
+        run: pip install numpy matplotlib pytest unittest
+      - name: "Install coverage package"
+        run: pip install --user coverage
+      - name: "Run pytest under coverage"
+        run: coverage run -m pytest
+      - name: 'Upload .coverage'
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage_info
+          path: .coverage
+          retention-days: 1
+  coverage_report:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install coverage package"
+        run: pip install --user coverage
+      - name: Download a single artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage_info
+      - name: "run coverage "
+        run: coverage report
+      - name: "convert to xml"
+        run: coverage xml
