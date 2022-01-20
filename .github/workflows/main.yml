@@ -55,3 +55,9 @@ jobs:
         run: coverage report
       - name: "convert to xml"
         run: coverage xml
+      - name: 'Upload XML file'
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage_report
+          path: coverage.xml
+          retention-days: 14
