@@ -7,3 +7,5 @@ The code used in this exercise is based on [Chapter 7 of the book "Learning Scie
 ## License
 
 Please check the `LICENSE` file in this repository.
+
+![example workflow](https://github.com/mohamad-altaweel/sse-github-actions-exercise/actions/workflows/main.yml/badge.svg)
